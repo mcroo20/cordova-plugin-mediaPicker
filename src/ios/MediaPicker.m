@@ -66,7 +66,8 @@
                 if(asset.mediaType==PHAssetMediaTypeImage){
                     [self imageToSandbox:asset dmcPickerPath:dmcPickerPath aListArray:aListArray selectArray:selectArray index:index];
                 }else{
-                    [self videoToSandboxCompress:asset dmcPickerPath:dmcPickerPath aListArray:aListArray selectArray:selectArray index:index];
+//                    [self videoToSandboxCompress:asset dmcPickerPath:dmcPickerPath aListArray:aListArray selectArray:selectArray index:index];
+                    [self videoToSandbox:asset dmcPickerPath:dmcPickerPath aListArray:aListArray selectArray:selectArray index:index];
                 }
             }
             index++;
@@ -129,9 +130,8 @@
 
 
 -(void)videoToSandbox:(PHAsset *)asset dmcPickerPath:(NSString*)dmcPickerPath aListArray:(NSMutableArray*)aListArray selectArray:(NSMutableArray*)selectArray index:(int)index{
-    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.networkAccessAllowed = YES;
-    options.resizeMode = PHImageRequestOptionsResizeModeFast;
     options.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         NSString *compressCompletedjs = [NSString stringWithFormat:@"MediaPicker.icloudDownloadEvent(%f,%i)", progress,index];
         [self.commandDelegate evalJs:compressCompletedjs];
@@ -379,6 +379,165 @@
     
     NSString *mimeType = response.MIMEType;
     return mimeType;
+}
+
+
+-(void) writeImagesToMovieAtPath:(NSString *) path withSize:(CGSize) size
+{
+//  NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//  NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectoryPath error:nil];
+//  for (NSString *tString in dirContents)
+//  {
+//    if ([tString isEqualToString:@"essai.mp4"])
+//    {
+//        [[NSFileManager defaultManager]removeItemAtPath:[NSString stringWithFormat:@"%@/%@",documentsDirectoryPath,tString] error:nil];
+//
+//    }
+//  }
+//
+//  NSLog(@"Write Started");
+//
+//  NSError *error = nil;
+//
+//  AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:
+//                              [NSURL fileURLWithPath:path] fileType:AVFileTypeMPEG4
+//                                                          error:&error];
+//  NSParameterAssert(videoWriter);
+//
+//  NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+//                               AVVideoCodecH264, AVVideoCodecKey,
+//                               [NSNumber numberWithInt:size.width], AVVideoWidthKey,
+//                               [NSNumber numberWithInt:size.height], AVVideoHeightKey,
+//                               nil];
+//
+//
+//  AVAssetWriterInput* videoWriterInput = [AVAssetWriterInput
+//                                         assetWriterInputWithMediaType:AVMediaTypeVideo
+//                                         outputSettings:videoSettings];
+//
+//
+//
+//
+//  AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor
+//                                                 assetWriterInputPixelBufferAdaptorWithAssetWriterInput:videoWriterInput
+//                                                 sourcePixelBufferAttributes:nil];
+//
+//  NSParameterAssert(videoWriterInput);
+//
+//  NSParameterAssert([videoWriter canAddInput:videoWriterInput]);
+//  videoWriterInput.expectsMediaDataInRealTime = YES;
+//  [videoWriter addInput:videoWriterInput];
+//  //Start a session:
+//  [videoWriter startWriting];
+//  [videoWriter startSessionAtSourceTime:kCMTimeZero];
+//
+//
+//  //Video encoding
+//
+//  CVPixelBufferRef buffer = NULL;
+//    NSArray m_PictArray = [NSArray array];
+//
+//  //convert uiimage to CGImage.
+//
+//  int frameCount = 0;
+//
+//  for(int i = 0; i<[m_PictArray count]; i++)
+//  {
+//    buffer = [self pixelBufferFromCGImage:[[m_PictArray objectAtIndex:i] CGImage] andSize:size];
+//
+//
+//    BOOL append_ok = NO;
+//    int j = 0;
+//    while (!append_ok && j < 30)
+//    {
+//        if (adaptor.assetWriterInput.readyForMoreMediaData)
+//        {
+//            printf("appending %d attemp %d\n", frameCount, j);
+//
+//            CMTime frameTime = CMTimeMake(frameCount,(int32_t) 10);
+//
+//            append_ok = [adaptor appendPixelBuffer:buffer withPresentationTime:frameTime];
+//            CVPixelBufferPoolRef bufferPool = adaptor.pixelBufferPool;
+//            NSParameterAssert(bufferPool != NULL);
+//
+//            [NSThread sleepForTimeInterval:0.05];
+//        }
+//        else
+//        {
+//            printf("adaptor not ready %d, %d\n", frameCount, j);
+//            [NSThread sleepForTimeInterval:0.1];
+//        }
+//        j++;
+//    }
+//    if (!append_ok)
+//    {
+//        printf("error appending image %d times %d\n", frameCount, j);
+//    }
+//    frameCount++;
+//    CVBufferRelease(buffer);
+//  }
+//
+//  [videoWriterInput markAsFinished];
+//    [videoWriter finishWritingWithCompletionHandler:^{
+//
+//    }];
+//
+//  [m_PictArray removeAllObjects];
+//
+//  NSLog(@"Write Ended");
+}
+
+-(void)CompileFilesToMakeMovie
+{
+//  AVMutableComposition* mixComposition = [AVMutableComposition composition];
+//
+//  NSString* audio_inputFileName = @"deformed.caf";
+//  NSString* audio_inputFilePath = [Utilities documentsPath:audio_inputFileName];
+//  NSURL*    audio_inputFileUrl = [NSURL fileURLWithPath:audio_inputFilePath];
+//
+//  NSString* video_inputFileName = @"essai.mp4";
+//  NSString* video_inputFilePath = [Utilities documentsPath:video_inputFileName];
+//  NSURL*    video_inputFileUrl = [NSURL fileURLWithPath:video_inputFilePath];
+//
+//  NSString* outputFileName = @"outputFile.mov";
+//  NSString* outputFilePath = [Utilities documentsPath:outputFileName];
+//  NSURL*    outputFileUrl = [NSURL fileURLWithPath:outputFilePath];
+//
+//  if ([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath])
+//    [[NSFileManager defaultManager] removeItemAtPath:outputFilePath error:nil];
+//
+//
+//
+//  CMTime nextClipStartTime = kCMTimeZero;
+//
+//  AVURLAsset* videoAsset = [[AVURLAsset alloc]initWithURL:video_inputFileUrl options:nil];
+//  CMTimeRange video_timeRange = CMTimeRangeMake(kCMTimeZero,videoAsset.duration);
+//  AVMutableCompositionTrack *a_compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+//  [a_compositionVideoTrack insertTimeRange:video_timeRange ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:nextClipStartTime error:nil];
+//
+//  //nextClipStartTime = CMTimeAdd(nextClipStartTime, a_timeRange.duration);
+//
+//  AVURLAsset* audioAsset = [[AVURLAsset alloc]initWithURL:audio_inputFileUrl options:nil];
+//  CMTimeRange audio_timeRange = CMTimeRangeMake(kCMTimeZero, audioAsset.duration);
+//  AVMutableCompositionTrack *b_compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+//  [b_compositionAudioTrack insertTimeRange:audio_timeRange ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:nextClipStartTime error:nil];
+//
+//
+//
+//  AVAssetExportSession* _assetExport = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetHighestQuality];
+//  _assetExport.outputFileType = @"com.apple.quicktime-movie";
+//  _assetExport.outputURL = outputFileUrl;
+//
+//  [_assetExport exportAsynchronouslyWithCompletionHandler:
+// ^(void ) {
+//     [self saveVideoToAlbum:outputFilePath];
+// }
+// ];
+}
+
+- (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
+  NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
+  return [UIImage imageWithData:data];
 }
 
 @end
